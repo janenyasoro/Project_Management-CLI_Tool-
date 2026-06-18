@@ -17,15 +17,14 @@ class Task:
         self.project_id = project_id
         self.status = "todo"
         self.priority = priority
-        self.assigned_to = []  # List of user IDs
-        self.created_by = ""  # User ID
+        self.assigned_to = []
+        self.created_by = ""
         self.created_at = datetime.now().isoformat()
         self.updated_at = datetime.now().isoformat()
-        self.due_date = None  # ISO date string
+        self.due_date = None
         self.completed_at = None
     
     def to_dict(self) -> dict:
-        """Convert task to dictionary for serialization"""
         return {
             "id": self.id,
             "title": self.title,
@@ -43,7 +42,6 @@ class Task:
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Task':
-        """Create task from dictionary"""
         task = cls(
             data["title"],
             data.get("description", ""),
@@ -61,13 +59,11 @@ class Task:
         return task
     
     def assign_to(self, user_id: str) -> None:
-        """Assign task to a user"""
         if user_id not in self.assigned_to:
             self.assigned_to.append(user_id)
             self.updated_at = datetime.now().isoformat()
     
     def unassign(self, user_id: str) -> bool:
-        """Unassign task from a user"""
         if user_id in self.assigned_to:
             self.assigned_to.remove(user_id)
             self.updated_at = datetime.now().isoformat()
@@ -75,21 +71,17 @@ class Task:
         return False
     
     def set_status(self, status: str) -> bool:
-        """Set task status"""
         if status in self.STATUSES:
             self.status = status
             self.updated_at = datetime.now().isoformat()
-            
             if status == "done":
                 self.completed_at = datetime.now().isoformat()
             else:
                 self.completed_at = None
-            
             return True
         return False
     
     def set_priority(self, priority: str) -> bool:
-        """Set task priority"""
         if priority in self.PRIORITIES:
             self.priority = priority
             self.updated_at = datetime.now().isoformat()
@@ -97,15 +89,12 @@ class Task:
         return False
     
     def set_due_date(self, due_date: str) -> None:
-        """Set due date (ISO format)"""
         self.due_date = due_date
         self.updated_at = datetime.now().isoformat()
     
     def is_overdue(self) -> bool:
-        """Check if task is overdue"""
         if not self.due_date or self.status == "done":
             return False
-        
         try:
             due = datetime.fromisoformat(self.due_date)
             return datetime.now() > due

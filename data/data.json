@@ -1,5 +1,53 @@
 {
-  "users": [],
-  "projects": [],
+  "users": [
+    {
+      "id": "b123a3af",
+      "name": "Alice",
+      "email": "alice@example.com",
+      "role": "developer",
+      "created_at": "2026-06-18T15:23:55.354015",
+      "is_active": true,
+      "projects": [
+        "67156134"
+      ]
+    },
+    {
+      "id": "6632be69",
+      "name": "Grace",
+      "email": "grace@example.com",
+      "role": "developer",
+      "created_at": "2026-06-18T15:24:44.452001",
+      "is_active": true,
+      "projects": [
+        "339e4431"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "67156134",
+      "name": "Test Project",
+      "description": "My first project",
+      "owner_id": "b123a3af",
+      "due_date": "2024-12-31",
+      "status": "planning",
+      "created_at": "2026-06-18T15:26:39.381430",
+      "updated_at": "2026-06-18T15:26:39.381445",
+      "tasks": [],
+      "team_members": []
+    },
+    {
+      "id": "339e4431",
+      "name": "API Development",
+      "description": "Build REST API",
+      "owner_id": "6632be69",
+      "due_date": "",
+      "status": "planning",
+      "created_at": "2026-06-18T15:26:39.520578",
+      "updated_at": "2026-06-18T15:26:39.520592",
+      "tasks": [],
+      "team_members": []
+    }
+  ],
   "tasks": []
 }

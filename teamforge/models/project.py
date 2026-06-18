@@ -18,11 +18,10 @@ class Project:
         self.status = "planning"
         self.created_at = datetime.now().isoformat()
         self.updated_at = datetime.now().isoformat()
-        self.tasks = []  # List of task IDs
-        self.team_members = []  # List of user IDs
+        self.tasks = []
+        self.team_members = []
     
     def to_dict(self) -> dict:
-        """Convert project to dictionary for serialization"""
         return {
             "id": self.id,
             "name": self.name,
@@ -38,7 +37,6 @@ class Project:
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Project':
-        """Create project from dictionary"""
         project = cls(
             data["name"],
             data.get("description", ""),
@@ -54,13 +52,11 @@ class Project:
         return project
     
     def add_task(self, task_id: str) -> None:
-        """Add a task to project"""
         if task_id not in self.tasks:
             self.tasks.append(task_id)
             self.updated_at = datetime.now().isoformat()
     
     def remove_task(self, task_id: str) -> bool:
-        """Remove a task from project"""
         if task_id in self.tasks:
             self.tasks.remove(task_id)
             self.updated_at = datetime.now().isoformat()
@@ -68,13 +64,11 @@ class Project:
         return False
     
     def add_member(self, user_id: str) -> None:
-        """Add a team member"""
         if user_id not in self.team_members:
             self.team_members.append(user_id)
             self.updated_at = datetime.now().isoformat()
     
     def remove_member(self, user_id: str) -> bool:
-        """Remove a team member"""
         if user_id in self.team_members:
             self.team_members.remove(user_id)
             self.updated_at = datetime.now().isoformat()
@@ -82,7 +76,6 @@ class Project:
         return False
     
     def set_status(self, status: str) -> bool:
-        """Set project status"""
         if status in self.STATUSES:
             self.status = status
             self.updated_at = datetime.now().isoformat()
@@ -90,7 +83,6 @@ class Project:
         return False
     
     def get_task_count(self) -> int:
-        """Get number of tasks in project"""
         return len(self.tasks)
     
     def __str__(self) -> str:

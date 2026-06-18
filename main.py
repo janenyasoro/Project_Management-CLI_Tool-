@@ -92,7 +92,7 @@ def main():
     delete_task.add_argument("--id", required=True, help="Task ID")
     
     # Help command
-    help_cmd = subparsers.add_parser("help", help="Show help")
+    subparsers.add_parser("help", help="Show help")
     
     # Parse arguments
     args = parser.parse_args()
@@ -109,13 +109,10 @@ def main():
     # Execute command
     if args.command == "add-user":
         handler.add_user(args.name, args.email, args.role)
-    
     elif args.command == "list-users":
         handler.list_users()
-    
     elif args.command == "show-user":
         handler.show_user(args.id)
-    
     elif args.command == "edit-user":
         active = None
         if args.active:
@@ -123,46 +120,32 @@ def main():
         elif args.inactive:
             active = False
         handler.edit_user(args.id, args.name, args.email, args.role, active)
-    
     elif args.command == "delete-user":
         handler.delete_user(args.id)
-    
     elif args.command == "add-project":
         handler.add_project(args.user_id, args.title, args.description, args.due)
-    
     elif args.command == "list-projects":
         handler.list_projects(args.user_id)
-    
     elif args.command == "show-project":
         handler.show_project(args.id)
-    
     elif args.command == "edit-project":
         handler.edit_project(args.id, args.title, args.description, args.due, args.status)
-    
     elif args.command == "delete-project":
         handler.delete_project(args.id)
-    
     elif args.command == "add-task":
         handler.add_task(args.project_id, args.title, args.description, args.priority, args.due)
-    
     elif args.command == "list-tasks":
         handler.list_tasks(args.project_id)
-    
     elif args.command == "show-task":
         handler.show_task(args.id)
-    
     elif args.command == "update-task":
         handler.update_task(args.id, args.title, args.description, args.status, args.priority, args.due)
-    
     elif args.command == "assign-task":
         handler.assign_task(args.id, args.user_id)
-    
     elif args.command == "delete-task":
         handler.delete_task(args.id)
-    
     elif args.command == "help":
         print_help()
-    
     else:
         print(f"Unknown command: {args.command}")
         print_help()

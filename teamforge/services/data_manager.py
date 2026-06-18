@@ -3,7 +3,6 @@
 import json
 import os
 from typing import Dict, List, Any, Optional
-from datetime import datetime
 
 class DataManager:
     """Handles JSON file I/O for all data"""
@@ -20,50 +19,39 @@ class DataManager:
         self.load()
     
     def _ensure_data_directory(self) -> None:
-        """Ensure data directory exists"""
         os.makedirs(os.path.dirname(self.DATA_FILE), exist_ok=True)
     
     def load(self) -> None:
-        """Load data from JSON file"""
         try:
             if os.path.exists(self.DATA_FILE):
                 with open(self.DATA_FILE, 'r') as f:
                     loaded_data = json.load(f)
                     self.data.update(loaded_data)
             else:
-                # Create initial data file
                 self.save()
-        except (json.JSONDecodeError, FileNotFoundError) as e:
-            print(f"⚠️ Error loading data: {e}. Creating new data file.")
+        except (json.JSONDecodeError, FileNotFoundError):
             self.data = {"users": [], "projects": [], "tasks": []}
             self.save()
     
     def save(self) -> None:
-        """Save data to JSON file"""
         try:
             with open(self.DATA_FILE, 'w') as f:
                 json.dump(self.data, f, indent=2)
             return True
-        except Exception as e:
-            print(f"❌ Error saving data: {e}")
+        except Exception:
             return False
     
     def get_users(self) -> List[Dict]:
-        """Get all users"""
         return self.data.get("users", [])
     
     def get_projects(self) -> List[Dict]:
-        """Get all projects"""
         return self.data.get("projects", [])
     
     def get_tasks(self) -> List[Dict]:
-        """Get all tasks"""
         return self.data.get("tasks", [])
     
     def save_user(self, user_dict: Dict) -> None:
-        """Save a user to data"""
         users = self.get_users()
-        # Update existing or append new
         for i, u in enumerate(users):
             if u["id"] == user_dict["id"]:
                 users[i] = user_dict
@@ -73,7 +61,6 @@ class DataManager:
         self.save()
     
     def save_project(self, project_dict: Dict) -> None:
-        """Save a project to data"""
         projects = self.get_projects()
         for i, p in enumerate(projects):
             if p["id"] == project_dict["id"]:
@@ -84,7 +71,6 @@ class DataManager:
         self.save()
     
     def save_task(self, task_dict: Dict) -> None:
-        """Save a task to data"""
         tasks = self.get_tasks()
         for i, t in enumerate(tasks):
             if t["id"] == task_dict["id"]:
@@ -95,7 +81,6 @@ class DataManager:
         self.save()
     
     def delete_user(self, user_id: str) -> bool:
-        """Delete a user by ID"""
         users = self.get_users()
         for i, u in enumerate(users):
             if u["id"] == user_id:
@@ -105,7 +90,6 @@ class DataManager:
         return False
     
     def delete_project(self, project_id: str) -> bool:
-        """Delete a project by ID"""
         projects = self.get_projects()
         for i, p in enumerate(projects):
             if p["id"] == project_id:
@@ -115,7 +99,6 @@ class DataManager:
         return False
     
     def delete_task(self, task_id: str) -> bool:
-        """Delete a task by ID"""
         tasks = self.get_tasks()
         for i, t in enumerate(tasks):
             if t["id"] == task_id:
@@ -125,47 +108,39 @@ class DataManager:
         return False
     
     def find_user_by_id(self, user_id: str) -> Optional[Dict]:
-        """Find a user by ID"""
         for user in self.get_users():
             if user["id"] == user_id:
                 return user
         return None
     
     def find_project_by_id(self, project_id: str) -> Optional[Dict]:
-        """Find a project by ID"""
         for project in self.get_projects():
             if project["id"] == project_id:
                 return project
         return None
     
     def find_task_by_id(self, task_id: str) -> Optional[Dict]:
-        """Find a task by ID"""
         for task in self.get_tasks():
             if task["id"] == task_id:
                 return task
         return None
     
     def find_user_by_name(self, name: str) -> Optional[Dict]:
-        """Find a user by name"""
         for user in self.get_users():
             if user["name"].lower() == name.lower():
                 return user
         return None
     
     def find_projects_by_user(self, user_id: str) -> List[Dict]:
-        """Find all projects for a user"""
         user = self.find_user_by_id(user_id)
         if not user:
             return []
-        
         project_ids = user.get("projects", [])
         return [p for p in self.get_projects() if p["id"] in project_ids]
     
     def find_tasks_by_project(self, project_id: str) -> List[Dict]:
-        """Find all tasks for a project"""
         project = self.find_project_by_id(project_id)
         if not project:
             return []
-        
         task_ids = project.get("tasks", [])
         return [t for t in self.get_tasks() if t["id"] in task_ids]

@@ -1,17 +1,14 @@
 """CLI helper functions and decorators"""
 
 import functools
-import sys
 from typing import Callable
 from rich.console import Console
-from rich.prompt import Prompt, Confirm
 from rich.panel import Panel
 from rich import box
 
 console = Console()
 
 def cli_command(func: Callable) -> Callable:
-    """Decorator for CLI commands with error handling"""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
@@ -24,52 +21,13 @@ def cli_command(func: Callable) -> Callable:
             return
     return wrapper
 
-def require_confirmation(message: str = "Are you sure?") -> Callable:
-    """Decorator to require confirmation before executing"""
-    def decorator(func: Callable) -> Callable:
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            if Confirm.ask(f"[yellow]{message}[/yellow]"):
-                return func(*args, **kwargs)
-            else:
-                console.print("[dim]Operation cancelled[/dim]")
-                return
-        return wrapper
-    return decorator
-
-def get_input(prompt: str, default: str = None) -> str:
-    """Get user input with optional default"""
-    if default:
-        user_input = input(f"{prompt} [{default}]: ").strip()
-        return user_input if user_input else default
-    return input(f"{prompt}: ").strip()
-
-def get_choice(options: list, prompt: str = "Choose an option") -> str:
-    """Get a choice from a list of options"""
-    console.print(f"\n[cyan]{prompt}:[/cyan]")
-    for i, option in enumerate(options, 1):
-        console.print(f"  {i}. {option}")
-    
-    while True:
-        try:
-            choice = input("> ").strip()
-            if choice.isdigit():
-                idx = int(choice) - 1
-                if 0 <= idx < len(options):
-                    return options[idx]
-            console.print("[red]Invalid choice. Please try again.[/red]")
-        except KeyboardInterrupt:
-            console.print("\n[yellow]Cancelled[/yellow]")
-            return None
-
 def print_banner():
     """Print application banner"""
-    from pyfiglet import figlet_format
-    
     try:
+        from pyfiglet import figlet_format
         banner = figlet_format("TeamForge", font="small")
         console.print(Panel(banner, style="bold cyan", border_style="blue"))
-    except:
+    except ImportError:
         console.print("[bold cyan]═══════════════════════════════════[/bold cyan]")
         console.print("[bold yellow]         TeamForge CLI[/bold yellow]")
         console.print("[bold cyan]═══════════════════════════════════[/bold cyan]")
@@ -103,7 +61,6 @@ def print_help():
         ("assign-task", "Assign task to user", "assign-task --id TASK789 --user-id USER123"),
         ("delete-task", "Delete a task", "delete-task --id TASK789"),
         ("help", "Show this help", "help"),
-        ("exit", "Exit the application", "exit")
     ]
     
     for cmd, desc, example in commands:
